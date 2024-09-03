@@ -10,6 +10,8 @@ import SwiftUI
 struct ContentView: View {
     @State private var checkAmount = 0.0
     @State private var numberOfPeople = 2
+    @State private var tipPercentage = 0
+    let tipPercentages = [10, 15, 20, 25, 0]
     var body: some View {
         NavigationStack{
             Form{
@@ -19,9 +21,16 @@ struct ContentView: View {
                         ForEach(1..<25){
                             Text("\($0) people")
                         }
-                    
                     }
                     .pickerStyle(.navigationLink)
+                }
+                
+                Section{
+                    Picker("Tip percentage", selection: $tipPercentage){
+                        ForEach(tipPercentages, id: \.self){
+                            Text($0, format: .percent)
+                        }
+                    }
                 }
                 
                 Section{
