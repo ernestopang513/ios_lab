@@ -14,6 +14,8 @@ struct ContentView: View {
     
     @State private var showingScore = false
     @State private var scoreTitle = ""
+    @State private var score = 0
+    @State private var countGame = 0
     
 //    init(){
 //        print(correctAnswer)
@@ -32,6 +34,7 @@ struct ContentView: View {
             //            Color.blue.ignoresSafeArea()
             
             VStack{
+                
                 Text("Guess the Flag").foregroundStyle(.white)
                     .font(.system(size: 30, weight: .heavy))
                 
@@ -60,30 +63,55 @@ struct ContentView: View {
                 .background(.thinMaterial)
                 .clipShape(.rect(cornerRadius: 40))
                 
-                Text("Score: ??")
+                Spacer()
+                
+                
+                Text("Score: \(score)")
                     .foregroundStyle(.white)
                     .font(.system(size: 30, weight: .semibold))
+                Spacer()
+                Button {
+                    score = 0
+                } label: {
+                    Text("Reset").padding(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
+                        .foregroundColor(.white).font(.system(size: 30, weight: .semibold))
+                }
+                .background(.ultraThinMaterial)
+                .cornerRadius(30)
             }
+            .padding()
         }
         .alert(scoreTitle, isPresented: $showingScore){
-            Button("Continue", action: askQuiestion)
+            Button("Continue", action: {
+                
+                askQuiestion()
+                GameReset()
+                
+            })
         } message: {
-            Text("Your score is ???")
+            Text("Your score is \(score)")
         }
     }
     func flagTapped(_ number: Int){
         if number == correctAnswer {
             scoreTitle = "Correct"
+            score += 1
         }else {
-            scoreTitle = "Wrong"
+            scoreTitle = "Wrong! That´s the flag of \(countries[correctAnswer])"
+            if score > 0 {
+                score -= 1
+            }
         }
         showingScore = true
     }
     func askQuiestion() {
         countries.shuffle()
         correctAnswer = Int.random(in: 0...2)
+        countGame += 1
     }
-    
+    func GameReset(){
+        
+    }
 }
 
 #Preview {
