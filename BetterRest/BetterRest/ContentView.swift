@@ -12,7 +12,7 @@ struct ContentView: View {
     
     @State private var wakeUp = defaultWakeTime
     @State private var sleepAmount = 8.0
-    @State private var coffeeAmount = 1
+    @State private var coffeeAmount = 2
     
     @State private var alertTitle = ""
     @State private var alertMessage = ""
@@ -31,7 +31,8 @@ struct ContentView: View {
             
             Form {
                 
-                VStack( alignment: .leading, spacing: 0) {
+//                VStack( alignment: .leading, spacing: 0) {
+                Section{
                     Text("When do you want to wake up?")
                         .font(.headline)
                         .padding(.top, 20)
@@ -40,7 +41,8 @@ struct ContentView: View {
                         .labelsHidden()
                         .padding(.top, 20)
                 }
-                VStack(alignment: .leading, spacing: 0){
+                Section{
+//                VStack(alignment: .leading, spacing: 0){
                     Text("Desired amount of sleep")
                         .font(.headline)
                         .padding(.top, 20)
@@ -48,15 +50,23 @@ struct ContentView: View {
                     Stepper("\(sleepAmount.formatted()) hours", value: $sleepAmount, in: 4...12, step: 0.25 )
                         .padding(.top, 20)
                 }
-                VStack(alignment: .leading, spacing: 0){
-                    Text("Daily coffee intake")
-                        .font(.headline)
-                        .padding(.top, 20)
+                Section{
+//                VStack(alignment: .leading, spacing: 0){
+                    
+//                    Text("Daily coffee intake")
+//                        .font(.headline)
+//                        .padding(.top, 20)
                     
 //                    Stepper( coffeeAmount == 1 ? "1 cup" :  "\(coffeeAmount) cups", value: $coffeeAmount, in: 1...20)
 //                        .padding(.top, 20)
-                    Stepper( "^[\(coffeeAmount) cup](inflect: true)", value: $coffeeAmount, in: 1...20)
-                        .padding(.top, 20)
+//                    Stepper( "^[\(coffeeAmount) cup](inflect: true)", value: $coffeeAmount, in: 1...20)
+//                        .padding(.top, 20)
+                    
+                    Picker("Daily coffee intake", selection: $coffeeAmount){
+                        ForEach(1..<21){
+                            Text("^[\($0) cup](inflect: true)")
+                        }
+                    }
                 }
             }
             .navigationTitle("BetterRest")
@@ -73,6 +83,8 @@ struct ContentView: View {
     }
     
     func calculateBedtime() {
+        //Variaable especial para el picker
+        let newCofeeAmount = coffeeAmount + 1
         do{
             let config = MLModelConfiguration()
             let model = try SleepCalculator(configuration: config)
@@ -81,7 +93,9 @@ struct ContentView: View {
             let hour = (components.hour ?? 0) * 60 * 60
             let minute = (components.minute ?? 0) * 60
             
-            let prediction = try model.prediction(wake: Double(hour + minute), estimatedSleep: sleepAmount, coffee: Double(coffeeAmount))
+//            let prediction = try model.prediction(wake: Double(hour + minute), estimatedSleep: sleepAmount, coffee: Double(coffeeAmount))
+            
+            let prediction = try model.prediction(wake: Double(hour + minute), estimatedSleep: sleepAmount, coffee: Double(newCofeeAmount))
             
             let sleepTime = wakeUp - prediction.actualSleep
             
@@ -92,6 +106,8 @@ struct ContentView: View {
             alertTitle = "Error"
             alertMessage = "Sorry, ther was a problem calculating your bedtime."
         }
+        print(coffeeAmount)
+        print(newCofeeAmount)
         showingAlert = true
     }
 }
