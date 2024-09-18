@@ -29,27 +29,35 @@ struct ContentView: View {
         NavigationStack{
             
             
-            VStack {
-                Text("When do you want to wake up?")
-                    .font(.headline)
+            Form {
                 
-                DatePicker("Please enter a time", selection: $wakeUp, displayedComponents: .hourAndMinute )
-                    .labelsHidden()
-                    .padding(.top, 10)
-                
-                Text("Desired amount of sleep")
-                    .font(.headline)
-                    .padding(.top, 40)
-                Stepper("\(sleepAmount.formatted()) hours", value: $sleepAmount, in: 4...12, step: 0.25 )
-                    .fixedSize()
-                    .padding(.top, 10)
-                Text("Daily coffee intake")
-                    .font(.headline)
-                    .padding(.top, 40)
-                
-                Stepper("\(coffeeAmount) cup(s)", value: $coffeeAmount, in: 1...20)
-                    .fixedSize()
-                    .padding(.top, 10)
+                VStack( alignment: .leading, spacing: 0) {
+                    Text("When do you want to wake up?")
+                        .font(.headline)
+                        .padding(.top, 20)
+                    
+                    DatePicker("Please enter a time", selection: $wakeUp, displayedComponents: .hourAndMinute )
+                        .labelsHidden()
+                        .padding(.top, 20)
+                }
+                VStack(alignment: .leading, spacing: 0){
+                    Text("Desired amount of sleep")
+                        .font(.headline)
+                        .padding(.top, 20)
+                    
+                    Stepper("\(sleepAmount.formatted()) hours", value: $sleepAmount, in: 4...12, step: 0.25 )
+                        .padding(.top, 20)
+                }
+                VStack(alignment: .leading, spacing: 0){
+                    Text("Daily coffee intake")
+                        .font(.headline)
+                        .padding(.top, 20)
+                    
+//                    Stepper( coffeeAmount == 1 ? "1 cup" :  "\(coffeeAmount) cups", value: $coffeeAmount, in: 1...20)
+//                        .padding(.top, 20)
+                    Stepper( "^[\(coffeeAmount) cup](inflect: true)", value: $coffeeAmount, in: 1...20)
+                        .padding(.top, 20)
+                }
             }
             .navigationTitle("BetterRest")
             .toolbar{
