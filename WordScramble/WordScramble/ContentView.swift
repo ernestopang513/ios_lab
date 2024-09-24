@@ -16,6 +16,23 @@ struct ContentView: View {
     @State private var errorMessage = ""
     @State private var showingError = false
     
+    var score: String {
+        
+        let countOfWords = usedWords.count
+        var letras = Int()
+        
+        if !(countOfWords < 1) {
+            for letter in usedWords {
+                letras +=  letter.count
+            }
+        }
+        
+        return "Words = \(countOfWords) \nLetters = \(letras)"
+        
+    }
+    
+    
+    
     var body: some View {
         NavigationStack{
             List{
@@ -32,12 +49,20 @@ struct ContentView: View {
                         }
                     }
                 }
+                Section{
+                    Text("Puntaje")
+                        .font(.headline)
+                    Text(score)
+                }
             }
             .navigationTitle(rootWord)
             .onSubmit(addNewWord)
             .onAppear(perform: startGame)
             .alert(errorTitle, isPresented: $showingError) {} message: {
                 Text(errorMessage)
+            }
+            .toolbar {
+                Button("Start Game", action: startGame)
             }
         }
     }
@@ -76,6 +101,8 @@ struct ContentView: View {
             if let startWords = try? String(contentsOf: startWordURL){
                 let allwords = startWords.components(separatedBy: "\n")
                 rootWord = allwords.randomElement() ?? "silkworn"
+                
+                usedWords = []
                 return
             }
         }
@@ -100,7 +127,7 @@ struct ContentView: View {
     func isReal(word: String) -> Bool {
         let checker = UITextChecker()
         let range = NSRange(location: 0, length: word.utf16.count)
-        let misspelledRange = checker.rangeOfMisspelledWord(in: word, range: range, startingAt: 0, wrap: false, language: "en")
+        let misspelledRange = checker.rangeOfMisspelledWord(in: word, range: range, startingAt: 0, wrap: false, language: "es")
         return misspelledRange.location == NSNotFound
     }
     
