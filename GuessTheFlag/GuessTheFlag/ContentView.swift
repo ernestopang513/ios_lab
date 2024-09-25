@@ -16,6 +16,8 @@ struct ContentView: View {
     @State private var scoreTitle = ""
     @State private var score = 0
     @State private var countGame = 0
+    @State private var animationAmount = 0.0
+    @State private var selectedFlag: Int? = nil
     
 //    init(){
 //        print(correctAnswer)
@@ -45,11 +47,19 @@ struct ContentView: View {
                     ForEach(0..<3){ number in
                         Button {
                             flagTapped(number)
+                            withAnimation{
+                                selectedFlag = number
+                                animationAmount += 360
+                            }
                         } label : {
                             Image(countries[number])
                                 .clipShape(.capsule)
                                 .shadow(radius: 5)
                             ////                        Text("Hola")
+                                .rotation3DEffect(
+                                    .degrees(selectedFlag == number ? animationAmount: 0),
+                                    axis: /*@START_MENU_TOKEN@*/(x: 0.0, y: 1.0, z: 0.0)/*@END_MENU_TOKEN@*/
+                                )
                         }
                     }
                 }
@@ -108,6 +118,7 @@ struct ContentView: View {
     func askQuiestion() {
         countries.shuffle()
         correctAnswer = Int.random(in: 0...2)
+        selectedFlag = nil
     }
     func GameReset(){
         if countGame == 8 {
