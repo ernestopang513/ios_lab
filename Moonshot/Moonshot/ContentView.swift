@@ -9,18 +9,13 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        ZStack {
-            Image(.fondo)
-//                .imageScale(.large)
-//                .foregroundStyle(.tint)
-            VStack{
-                Text("Hello, world!")
-                    .foregroundColor(.white)
-                Text("Hola")
-                    .foregroundColor(.white)
+        NavigationStack{
+            
+            NavigationLink("Tap me"){
+                Text("Detail View")
             }
+            .navigationTitle("SwiftUI")
         }
-        .padding()
     }
 }
 
