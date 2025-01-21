@@ -7,13 +7,27 @@
 import SwiftUI
 
 struct Animation101: View {
+    
+    @State private var isVisible = false
+    
     var body: some View {
         VStack {
             Text("Animacion FadeIn")
                 .font(.title)
             
-            Image("cube-outline").resizable().frame(width: 50, height: 50).background(Color.red)
+            Spacer()
+            Image("cube-outline").resizable().frame(width: 100, height: 100).background(Color.red)
+                .scaleEffect(isVisible ? 1 : 0.5)
+                .animation(.spring(response: 0.5, dampingFraction: 0.5, blendDuration: 0), value: isVisible)
+                .opacity(isVisible ? 1 : 0)
+            
+            Spacer()
+            Button("Toggle Fade") {
+                            isVisible.toggle() // Cambia el estado para activar la animación
+            }.padding()
         }
+        
+        Spacer()
         Spacer()
         
         
