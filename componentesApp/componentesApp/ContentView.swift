@@ -23,14 +23,17 @@ struct ContentView: View {
 //                    }
                 })
                 Section(content: {
-                    NavigationLink(destination: Animation101()) {
+                    NavigationLink(destination: PullToRefresh()) {
                         Label("Pull to refresh", systemImage: "arrow.clockwise")
                     }
-                    NavigationLink(destination: Animation101()) {
+                    NavigationLink(destination: CustomSectionListView()) {
                         Label("Section List", systemImage: "list.bullet")
                     }
-                    NavigationLink(destination: DetailView()) {
+                    NavigationLink(destination: ModalScreen()) {
                         Label("Modal", systemImage: "square.on.square")
+                    }
+                    NavigationLink(destination: ModalScreen2()) {
+                        Label("Modal 2", systemImage: "square.on.square")
                     }
                     NavigationLink(destination: DetailView()) {
                         Label("InfiniteScroll", systemImage: "square.and.arrow.down")
